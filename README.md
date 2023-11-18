@@ -13,7 +13,7 @@ performance has been done "on the air".  There are no guarantees or other warran
 performance of this receiver module.  What you see is what you get!
 
 Gerber files for PCB fabrication are included in the gerbers folder.
-A PDF of the schematic (qsd4_schematic.pdf) is included for quick viewing of the circuit design.
+A PDF of the schematic (qsd4.pdf) is included for quick viewing of the circuit design.
 
 Please note that the components used in this design increase the cost compared to the
 original design.  However, the board is easier to build.  A link to a public Digikey
@@ -46,30 +46,7 @@ One page the same specification is shown for Vcc = 5.0 volts, and the maximum in
 This shows a method to increase the frequency range, however, a matching 5.0 volt specified multiplexer
 must be used.  A 5.0 volt multiplexer is in fact available at no cost penalty.
 
-QSD2 resolves the high frequency problem by using a divide-by-2 quadrature circuit.  The frequency is now:
-
-(28.510 MHz + 48 kHz) * 2 = 57.116 MHz
-
-This is well within the frequency specification of the 74AC74 flip-flop IC even with Vcc = 3.3 volts.
-
-## Implementation of the Divide-by-2 Quadrature
-
-Once again you don't get something for nothing, and the divide-by-2 quadrature circuit requires a
-little more effort.
-
-Divide-by-2 requires a clock signal and the inverted clock signal.  This is easy enough to provide
-using an inverter integrated circuit:
-
-<https://www.ti.com/lit/ds/symlink/sn74lvc1g14.pdf>
-
-So providing the inverted clock signal is easy.  However, one solution creates a new problem!
-The inverter creates a small delay in the inverted signal.  This affects the quality of the quadrature.
-However, this is easy to compensate for.  Simply add another inverter to the output to "match" the delays.
-So we have to add two these inexpensive devices in addition to the same flip-flop device used by divide-by-4.
-
-The divide-by-2 circuit was simulated and found to produce acceptable quadrature.
-
-For optimal quadrature circuit performance, the coaxial cable between the Main board and the QSD2 should be
+For optimal quadrature circuit performance, the coaxial cable between the Main board and the QSD4 should be
 as short as possible.
 
 ## A Summary of Methods to Extend the T41 Frequency Range
@@ -150,11 +127,15 @@ The power supplies routed through the 16 wire ribbon cable are prone to noise, m
 Extra decoupling components were added to clean up the power supplies.  This has been noted in a lower noise floor
 of the displayed spectrum.
 
-### Option for 3.3 or 5.0 Volts Biasing
+### Option for 3.3 or 5.0 Volts Biasing and Comments on Reference Regulators
 
 A zero ohm jumper is placed to select either 3.3 or 5.0 volt supply bias to the quadrature and demodulator devices.
 It is also necessary to change the instrumentation amplifier reference regulators depending on the the chosen bias voltage.
 Use 1.8 volt regulators with 3.3 volt bias, or a 2.5 volt regulator with 5.0 volt bias.
+
+There are independent regulators U7 and U8 for the instrumentation amplifiers.  It may be possible to use a single regulator
+for both.  A jumper resistor R16 can be placed to implement this change.  The capacitor C26 and U8 are not used.  This
+change has not been tested yet, however, there is a good probability it will work fine.
 
 ### Connectors
 
@@ -175,7 +156,7 @@ The prototype PCBs were fabricated by PCBWay at a cost of US$1.00 each.  Shippin
 
 A public Digikey BOM is here:
 
-<https://www.digikey.com/en/mylists/list/K5OIGZF85K>
+<https://www.digikey.com/en/mylists/list/WJHL6RPJHR>
 
 This BOM includes parts to build a board with 5.0 volt biasing.  This is assumed to be the highest performance configuration.
 
@@ -187,15 +168,11 @@ to find subsitutes as required.
 In general, QSD4 is easier to build than the original V010/V011 series boards.  There are a few items to be aware of to avoid
 build errors.
 
-The most probable error(s) are correct orientation of the flip-flop, multiplexer, transformer, and instrumentation amplifier devices.
-The pin 1 markings on the devices are very difficult to see.  Unfortunately, the pin 1 marks on the V1.0 PCB are missing for U2, the
-multiplexer, and for U5, one of the instrumentation ICs.  The transformer markings are easy to read; this should be clear in the
-photograph of the finished board.
+The most probable error(s) are incorrect orientation of the flip-flop, multiplexer, transformer, and instrumentation amplifier devices.  The integrated circuits have round dots located near pin 1.  The transformer has a visible center tap, and this should be connected to the output side of the circuit.
 
 There are also 3 leaded electrolytic capacitors.  The markings for these parts are clear on the PCB.
 
-Here are details on each part with regards to proper orientation of the board.  The descriptions are viewing the top side of the board,
-with the "T41 EXPERIMENTERS PLATFORM" near the bottom of the board in normal left-to-right reading orientation.
+Here are details on each part with regards to proper orientation of the board.  The descriptions are viewing the top side of the board, with the "T41 EXPERIMENTERS PLATFORM" near the bottom of the board in normal left-to-right reading orientation.
 
 ### Transformer TR1
 
@@ -203,50 +180,51 @@ The transformer TR1 should be placed with the "dot" at the upper right corner.  
 
 ### 74AC74 Dual Flip-Flop U4
 
-Pin 1 should be in the lower right corner.  This is marked with a small white dot on the PCB.
+Pin 1 should be in the upper left corner.  This is marked with a small white dot on the PCB.
+Note that both the flip-flop and the multiplexer are 4.4 mm TSOP type packages.
 
 ### 3253 Multiplexer U3
 
-No marking for Pin 1 is on the board.  Pin 1 is at the upper left.  The part I used has a bar on the Pin 1 end.  So the part is placed
-with the bar up, towards the flip-flop device.
+Pin 1 is at the upper left.  So the part is placed with the dot up, towards the flip-flop device.
+So for the QSD4, the flip-flop and the multiplexer pin 1 dots should both be upper left.
 
 ### Instrumentation Amplifiers AD8226 U5 and U6
 
-Only U5 has the Pin 1 indicated with a dot on the PCB.  However, both parts are oriented the same, with Pin 1 towards the upper left.
-There is a dot on the parts to indicated Pin 1, however, it is very hard to see.  The package is beveled on the Pin 1 side; this is easy to see.
+Only U5 has the Pin 1 indicated with a dot on the PCB.  However, both parts are oriented the same, with Pin 1 towards the upper left.  There is a dot on the parts to indicate Pin 1, however, it is very hard to see.  The package is beveled on the Pin 1 side; this is easy to see.
 
 ### Non-placed Parts
 
 C20 and C21 are not used.
 
-R29 and R30 are zero-ohm jumpers.  Place R29 for 5.0 volt bias on the quadrature generator.  This is the recommended configuration.
-Don't place R30 which is the 3.3 volt jumper.
+R29 and R30 are zero-ohm jumpers.  Place R29 for 5.0 volt bias on the quadrature generator.  This is the recommended configuration, and don't place R30 which is the 3.3 volt jumper.
 
 ### Bottom Side Parts
 
-There are 3 capacitors and 1 resistor on the bottom side.  These should be soldered last.  I was able to use a hot air gun without
-any problems with the top-side components desoldering.
+There is 1 capacitor on the bottom side.  This should be soldered last.  I was able to use a hot air gun without any problems with the top-side components desoldering.
+
+R16 is placed on the bottom side in the case of using only one of the reference voltage regulators.
 
 ### SMA Connectors
 
-Take a good look at the placement of the board in your T41 radio.  You will want the SMA connectors of the QSD2 in the orientation for
-easy coaxial cable routing.  I used 90 degree connectors as this was the easiest for extensive testing, but not necessarily the best for
-permanent installation.  Also, you may choose to put the SMAs on one side or the other for optimal cable routing.
+Take a good look at the placement of the board in your T41 radio.  You will want the SMA connectors of the QSD2 in the orientation for easy coaxial cable routing.  I used 90 degree connectors as this was the easiest for extensive testing, but not necessarily the best for permanent installation.  Also, you may choose to put the SMAs on one side or the other for optimal cable routing.
 
 Please note that the cable from the Main board to J1, which is the receive local oscillator, should be as short as possible.
 
-### High Resolution Photos of QSD2
+### High Resolution Photos of QSD4
 
-Links to photos of a fully constructed QSD2 follow.
+Links to photos of a fully constructed QSD4 follow.
 
-<https://drive.google.com/file/d/1xf6yhk0A5sCjX5wh1JE4dn1bHuM8j0T6/view?usp=sharing>
+<https://drive.google.com/file/d/1aspcZNfzApl-qxwgoq-D433Be0dcwM16/view?usp=sharing>
 
-<https://drive.google.com/file/d/1N_Db95VSrJVtja7tjd8az9CCwICfp4F0/view?usp=sharing>
+<https://drive.google.com/file/d/1kP5jGNJovGSlniU-m27XpsKZK9AjJI5x/view?usp=sharing>
 
-<https://drive.google.com/file/d/1DRWaFW7d4UvI1i016jCJsevu2qg0vANx/view?usp=sharing>
+<https://drive.google.com/file/d/10uLrnD7fPuJHRcCnD-vJwYjdFCpwKCTR/view?usp=sharing>
 
-<https://drive.google.com/file/d/14mD85wMKtzQJTBV6h13MQaz7uZWobGtN/view?usp=sharing>
+<https://drive.google.com/file/d/1hoJ_x_dKpq-bHXMOEn-O8QFBmkSheuwZ/view?usp=sharing>
 
+Please note that the above photos show a version 1.0 board.  The Gerber files are for
+a revised version 1.1.  The only significant difference is the placement of a 0 ohm resistor
+on the back side to allow optional sharing of a single 2.5 volt reference source.
 
 ## References and Further Reading
 
@@ -264,5 +242,7 @@ Rod took the original T41 SDT design and evolved it into a high-performance digi
 4.  "The Lentz Receiver: Tayloe Evolved" by H. Scott Lentz, AG7FF.  An interesting discussion of several design features of the
 "Lentz Receiver" which improve the performance of the typical "Tayloe Detector" style HF receiver.
 <https://www.arrl.org/files/file/QEX_Next_Issue/2023/05%20may-jun%202023/05%202023%20TofC.pdf>
+5.  The QSD2 which is the predecessor of the QSD4:
+<https://github.com/Greg-R/qsd2>
 
 

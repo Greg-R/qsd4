@@ -242,7 +242,7 @@ Rod took the original T41 SDT design and evolved it into a high-performance digi
 4.  "The Lentz Receiver: Tayloe Evolved" by H. Scott Lentz, AG7FF.  An interesting discussion of several design features of the
 "Lentz Receiver" which improve the performance of the typical "Tayloe Detector" style HF receiver.
 <https://www.arrl.org/files/file/QEX_Next_Issue/2023/05%20may-jun%202023/05%202023%20TofC.pdf>
-5.  The QSD2 which is the predecessor of the QSD4:
+5.  The QSD2 which is very similar to the QSD4:
 <https://github.com/Greg-R/qsd2>
 
 
